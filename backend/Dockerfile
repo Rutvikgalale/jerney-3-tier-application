@@ -1,31 +1,29 @@
-# ---- Build stage ----
 FROM node:20-alpine AS build
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production && npm cache clean --force
+COPY package.json package-lock* ./
+# dependencies related to production only
+RUN npm ci --only-production && npm cache clean --force
 
-# ---- Production stage ----
+# no need to build backend image because backend is very lightweight
 FROM node:20-alpine AS production
 
-# Security: run as non-root user
+# in node:20-alpine user is not present so we need to create user
+# In Alpine Linux -S means system
+# It tells the OS to create a system user or system group instead of a normal login user.
+# running container as non root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Security: remove unnecessary packages
 RUN apk --no-cache add dumb-init
 
 WORKDIR /app
 
-# Copy only production dependencies from build stage
 COPY --from=build /app/node_modules ./node_modules
-COPY src/ ./src/
 
-# Security: own files by non-root user
-RUN chown -R appuser:appgroup /app
+COPY src/ ./src/
 
 USER appuser
 
 EXPOSE 5000
 
-# Security: use dumb-init for proper signal handling (PID 1 problem)
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "src/index.js"]
