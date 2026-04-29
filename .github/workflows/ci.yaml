@@ -39,9 +39,9 @@ jobs:
   # ==============================================================
   #
 
-  lint: 
-  name: lint code
-  runs-on: ubuntu-latest
+  lint:
+    name: lint code
+    runs-on: ubuntu-latest
   continue-on-error: true
   strategy:
     matrix:
@@ -73,13 +73,13 @@ jobs:
   sca:
     name: "🛡️  Dependency Audit"
     runs-on: "ubuntu-latest"
-    needs: Lint
+    needs: lint
     strategy:
       matrix: 
         component: [backend, frontend]
       steps:
         - name: checkout code
-          uses: actions checkout/@v4
+          uses: actions/checkout@v4
 
         - name: setup node.js
           uses: actions/setup-node@v4
@@ -90,7 +90,7 @@ jobs:
 
         - name: install dependencies
           working-directory: ${{ matrix.component }}
-          Run: npm ci
+          run: npm ci
 
       # npm audit for known vulnerabilities (fail on high/critical)
         - name: npm audit
@@ -122,7 +122,7 @@ build:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-actions@v3
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
