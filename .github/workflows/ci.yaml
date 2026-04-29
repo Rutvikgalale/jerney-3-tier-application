@@ -8,7 +8,7 @@
 
 # name of workflow
 name: jerney devsecops workflow
-# on which activities this workflow needs to be trigered
+#  on which activities this workflow needs to be trigered
 on:
   push:
     branches:
