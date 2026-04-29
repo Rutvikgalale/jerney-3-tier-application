@@ -11,9 +11,11 @@ name: jerney devsecops workflow
 # on which activities this workflow needs to be trigered
 on:
   push:
-    branches: ["*"]
+    branches: 
+      ["*"]
   pull_request:
-    branches: ["*"]
+    branches: 
+      ["*"]
 
 env:
   DOCKER_REGISTRY: ghcr.io
