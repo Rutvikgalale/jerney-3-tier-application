@@ -42,11 +42,11 @@ jobs:
   lint:
     name: lint code
     runs-on: ubuntu-latest
-  continue-on-error: true
-  strategy:
-    matrix:
-      component: [backend, frontend]
-  steps:
+    continue-on-error: true
+    strategy:
+      matrix:
+        component: [backend, frontend]
+    steps:
     - name: checkout code
       uses: actions/checkout@v4
 
