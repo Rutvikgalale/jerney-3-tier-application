@@ -12,10 +12,8 @@ name: jerney devsecops workflow
 on:
   push:
     branches:
-      - '*' 
   pull_request:
     branches: 
-      - '*'
 
 env:
   DOCKER_REGISTRY: ghcr.io
